@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+# Stop the container and clean up resource
+#
+#set -ex
+[ $1 ] && [ $2 ] || {
+    echo "Syntax:"
+    echo "stop <container> <ovs-bridge>"
+    exit 1
+} 
+container=$1
+switch=$2
+
+# clean-up
+docker ps -a > /tmp/containers
+if grep $container /tmp/containers 2>/dev/null; then 
+    echo "stop $container and clean interface of ovs"
+    PID=$(docker inspect --format='{{.State.Pid}}' $container 2>/dev/null)
+    PORT=$(ovs-vsctl list-ports $switch|grep "$PID")
+    if [ -n "$PORT" ]; then 
+    	ovs-vsctl del-port $switch $PORT
+    fi 
+    docker kill $container 2>/dev/null >/dev/null || true
+    docker rm $container 2>/dev/null >/dev/null || true
+else
+    echo "No such container: $1"
+fi

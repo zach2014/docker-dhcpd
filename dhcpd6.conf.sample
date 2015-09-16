@@ -1,0 +1,10 @@
+# For ISC DHCPD dhcpd6.conf (ensure the lines are copied in full!)
+#option dhcp6.map-option code 95 = string;
+#option dhcp6.name-servers 20:15:9::5353;
+option dhcp6.domain-search "docker.wan";
+subnet6 20:15:9::/64 {
+   range6 20:15:9::100 20:15:9::1000;
+    prefix6 20:16:ffff:: 20:16:fff0:: /60;
+    #option dhcp6.map-option 00:59:00:0f:00:08:1f:c0:00:02:00:34:20:14:0d:b8:ff:ff:f0:00:5b:00:09:40:20:14:0d:b8:ca:fe:ca:fe;
+    option dhcp6.name-servers 20:15:9::5353;
+}

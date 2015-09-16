@@ -1,0 +1,21 @@
+#!/bin/sh
+#
+# Create new docker containers and run them for the given subnets
+#
+#set -ex
+[ $1 ] && [ $2 ] && [ $3 ]  && [ $4 ] || {
+    echo "Syntax:"
+    echo "start <container> <ovs-bridge> <addr/mask> <addr6/prefix>"
+    exit 1
+} 
+container=$1
+switch=$2
+addr=$3
+addr6=$4
+
+# start-up
+id=$(docker run -d --name=$container dhcpd)
+echo ">> Started container $container/$id"
+
+echo ">> Connecting pipework"
+sudo ./pipework $switch $container $addr -6 $addr6 

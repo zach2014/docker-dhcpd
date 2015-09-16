@@ -1,0 +1,20 @@
+# option definitions common to all supported networks...
+option domain-name-servers 20.15.9.53, 8.8.4.4;
+option routers 20.15.9.3;
+
+default-lease-time 86400;
+max-lease-time 86400;
+
+# If this DHCP server is the official DHCP server for the local
+# network, the authoritative directive should be uncommented.
+authoritative;
+
+# Only hands out leases if an interface is on that given subnet
+subnet 192.168.20.0 netmask 255.255.255.0 {
+	option domain-name "vlan20.eng";
+	range 192.168.20.100 192.168.20.250;
+}
+subnet 20.15.9.0 netmask 255.255.255.0 {
+	option domain-name "docker.wan";
+	range 20.15.9.100 20.15.9.250;
+}
